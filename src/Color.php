@@ -12,6 +12,7 @@
 namespace Kirki\Control;
 
 use Kirki\Control\Base;
+use Kirki\Core\Kirki;
 
 // Exit if accessed directly.
 if ( ! defined( 'ABSPATH' ) ) {
@@ -48,6 +49,54 @@ class Color extends Base {
 	 * @var string
 	 */
 	public $mode = 'full';
+
+	/**
+	 * Enqueue control related scripts/styles.
+	 *
+	 * @access public
+	 */
+	public function enqueue() {
+		parent::enqueue();
+
+		$url = apply_filters(
+			'kirki_package_url_control_color',
+			trailingslashit( Kirki::$url ) . 'packages/kirki-framework/control-color/src'
+		);
+
+		wp_enqueue_script(
+			'wp-color-picker-alpha',
+			"$url/assets/scripts/wp-color-picker-alpha.js",
+			[
+				'wp-color-picker'
+			],
+			KIRKI_VERSION,
+			true
+		);
+
+		wp_enqueue_style( 'wp-color-picker' );
+
+		// Enqueue the script.
+		wp_enqueue_script(
+			'kirki-control-color',
+			"$url/assets/scripts/control.js",
+			[
+				'kirki-script',
+				'jquery',
+				'customize-base',
+				'wp-color-picker-alpha'
+			],
+			KIRKI_VERSION,
+			false
+		);
+
+		// Enqueue the style.
+		wp_enqueue_style(
+			'kirki-control-color-style',
+			"$url/assets/styles/style.css",
+			[],
+			KIRKI_VERSION
+		);
+	}
 
 	/**
 	 * Refresh the parameters passed to the JavaScript via JSON.
