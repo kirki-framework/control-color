@@ -11,7 +11,6 @@
 add_action(
     'customize_register',
     function() {
-        class_alias( 'Kirki\Control\Color', 'Kirki_Control_Base' );
-    },
-    0
+        class_alias( 'Kirki\Control\Color', 'Kirki_Control_Color' );
+    }
 );
