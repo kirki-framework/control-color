@@ -83,7 +83,8 @@ class Color extends Base {
 				'kirki-script',
 				'jquery',
 				'customize-base',
-				'wp-color-picker-alpha'
+				'wp-color-picker-alpha',
+				'kirki-dynamic-control',
 			],
 			KIRKI_VERSION,
 			false
