@@ -80,7 +80,6 @@ class Color extends Base {
 			'kirki-control-color',
 			"$url/assets/scripts/control.js",
 			[
-				'kirki-script',
 				'jquery',
 				'customize-base',
 				'wp-color-picker-alpha',
