@@ -14,6 +14,8 @@ add_action(
         class_alias( 'Kirki\Control\Color', 'Kirki_Control_Color' );
     }
 );
+class_alias( 'Kirki\Field\Color', 'Kirki_Field_Color' );
+class_alias( 'Kirki\Field\Color_Alpha', 'Kirki_Field_Color_Alpha' );
 
 add_action(
     'customize_controls_print_footer_scripts',
