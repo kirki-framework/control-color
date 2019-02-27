@@ -8,6 +8,9 @@
  * @since      4.0
  */
 
+if ( ! function_exists( 'add_action' ) ) {
+    return;
+}
 add_action(
     'customize_register',
     function() {
