@@ -96,3 +96,11 @@ class Color extends Base {
 		$this->json['mode']             = $this->mode;
 	}
 }
+
+add_action(
+	'customize_register',
+	function( $wp_customize ) {
+		$wp_customize->register_control_type( '\Kirki\Control\Color' );
+	},
+	999
+);
