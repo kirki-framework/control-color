@@ -5,6 +5,8 @@
 First, install the package using composer:
 
 ```bash
+composer require kirki-framework/url-getter
+composer require kirki-framework/control-base
 composer require kirki-framework/control-color
 ```
 
