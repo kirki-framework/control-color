@@ -49,6 +49,35 @@ class Color extends Base {
 	public $mode = 'full';
 
 	/**
+	 * Has the control already been whitelisted for JS-templating?
+	 *
+	 * @static
+	 * @access private
+	 * @since 1.0.1
+	 * @var bool
+	 */
+	private static $js_templating_whitelisted = false;
+
+	/**
+	 * Constructor.
+	 *
+	 * Supplied `$args` override class property defaults.
+	 *
+	 * @since 1.0
+	 * @see WP_Customize_Manager
+	 * @param WP_Customize_Manager $manager Customizer bootstrap instance.
+	 * @param string               $id      Control ID.
+	 * @param array                $args    The arguments.
+	 */
+	public function __construct( $manager, $id, $args = array() ) {
+		if ( ! self::$js_templating_whitelisted ) {
+			$manager->register_control_type( '\Kirki\Control\Color' );
+			self::$js_templating_whitelisted = true;
+		}
+		parent::__construct( $manager, $id, $args );
+	}
+
+	/**
 	 * Enqueue control related scripts/styles.
 	 *
 	 * @access public
@@ -97,18 +126,3 @@ class Color extends Base {
 		$this->json['mode']             = $this->mode;
 	}
 }
-
-add_action(
-	'customize_register',
-	/**
-	 * Registers the control and whitelists it for JS-templating.
-	 *
-	 * @since 1.0
-	 * @param WP_Customize_Manager $wp_customize The main customizer object.
-	 * @return void
-	 */
-	function( $wp_customize ) {
-		$wp_customize->register_control_type( '\Kirki\Control\Color' );
-	},
-	999
-);
