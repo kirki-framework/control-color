@@ -26,8 +26,8 @@ add_action(
             [
                 'type'              => 'theme_mod',
                 'capability'        => 'edit_theme_options',
-                'default'           => 'rgba(255,255,255,1)', // Use rgba as default to enable alpha channel.
-                'transport'         => 'refresh', // or postMessage
+                'default'           => '#fff',
+                'transport'         => 'refresh', // Or postMessage.
                 'sanitize_callback' => 'sanitize_text_field', // Or a custom sanitization callback.
             ]
         );
@@ -37,8 +37,11 @@ add_action(
                 $wp_customize,
                 'my_control',
                 [
-                    'label' => esc_html__( 'My Color Control', 'theme_textdomain' ),
-                    'section' => 'colors',
+                    'label'   => esc_html__( 'My Color Control', 'theme_textdomain' ),
+					'section' => 'colors',
+					'choices' => [
+						'alpha' => true,
+					]
                 ]
             )
         );

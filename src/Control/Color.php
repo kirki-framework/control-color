@@ -70,7 +70,7 @@ class Color extends Base {
 		);
 
 		// Enqueue the colorpicker.
-		$url = new URL( dirname( __DIR__ ) . '/assets/scripts/wp-color-picker-alpha.js.js' );
+		$url = new URL( dirname( __DIR__ ) . '/assets/scripts/wp-color-picker-alpha.js' );
 		wp_enqueue_script( 'wp-color-picker-alpha', $url->get_url(), [ 'wp-color-picker' ], '4.0', true );
 		wp_enqueue_style( 'wp-color-picker' );
 
@@ -79,7 +79,7 @@ class Color extends Base {
 		wp_enqueue_script( 'kirki-control-color', $url->get_url(), [ 'jquery', 'customize-base', 'customize-controls', 'wp-color-picker-alpha', 'kirki-dynamic-control' ], '4.0', false );
 
 		// Enqueue the control style.
-		$url = new URL( dirname( __DIR__ ) . '/assets/styles/style.js' );
+		$url = new URL( dirname( __DIR__ ) . '/assets/styles/style.css' );
 		wp_enqueue_style( 'kirki-control-color-style', $url->get_url(), [], '4.0' );
 	}
 
