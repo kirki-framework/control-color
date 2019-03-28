@@ -44,7 +44,7 @@ add_action( 'customize_register', function( $wp_customize ) {
 		'capability'        => 'edit_theme_options',
 		'default'           => '#fff',
 		'transport'         => 'refresh', // Or postMessage.
-		'sanitize_callback' => 'sanitize_text_field', // Or a custom sanitization callback.
+		'sanitize_callback' => [ '\kirki\Field\Color', 'sanitize' ], // Or a custom sanitization callback.
 	] );
 
 	// Add control.
