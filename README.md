@@ -26,7 +26,6 @@ To add a control using the customizer API:
  */
 add_action( 'customize_register', function( $wp_customize ) {
 	$wp_customize->register_control_type( '\Kirki\Control\Color' );
-
 } );
 
 /**
