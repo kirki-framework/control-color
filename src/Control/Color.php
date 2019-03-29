@@ -102,6 +102,21 @@ class Color extends Base {
 	}
 
 	/**
+	 * Get the URL for the control folder.
+	 *
+	 * This is a static method because there are more controls in the Kirki framework
+	 * that use colorpickers, and they all need to enqueue the same assets.
+	 *
+	 * @static
+	 * @access public
+	 * @since 1.0.6
+	 * @return string
+	 */
+	public static function get_control_path_url() {
+		return URL::get_from_path( dirname( __DIR__ ) );
+	}
+
+	/**
 	 * Refresh the parameters passed to the JavaScript via JSON.
 	 *
 	 * @access public
