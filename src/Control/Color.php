@@ -11,6 +11,7 @@
 namespace Kirki\Control;
 
 use Kirki\Control\Base;
+use Kirki\Control\Color;
 use Kirki\Core\Kirki;
 use Kirki\URL;
 
@@ -34,10 +35,10 @@ class Color extends Base {
 	 * The version. Used in scripts & styles for cache-busting.
 	 *
 	 * @static
-	 * @access private
+	 * @access public
 	 * @since 1.0.2
 	 */
-	private static $control_ver = '1.0.2';
+	public static $control_ver = '1.0.6';
 
 	/**
 	 * Colorpicker palette
