@@ -32,15 +32,23 @@ data = _.defaults( data, {
 			<span class="description customize-control-description">{{{ data.description }}}</span>
 		<# } #>
 	</label>
-	<input
-		type="text"
-		data-type="{{ data.mode }}"
-		{{{ data.inputAttrs }}}
-		data-palette="{{ data['data-palette'] }}"
-		data-default-color="{{ data['data-default-color'] }}"
-		data-alpha="{{ data['data-alpha'] }}"
-		value="{{ data.value }}"
-		class="kirki-color-control"
-		data-id="{{ data['data-id'] }}"
-	/>
+	<div class="kirki-color-input-wrapper collapsed mode-{{ data.mode }}">
+		<button class="toggle-colorpicker">
+			<span class="screen-reader-text"><?php esc_html_e( 'Select Color', 'kirki' ); ?></span>
+			<span class="placeholder"></span>
+		</button>
+		<input
+			type="text"
+			data-type="{{ data.mode }}"
+			{{{ data.inputAttrs }}}
+			data-palette="{{ data['data-palette'] }}"
+			data-default-color="{{ data['data-default-color'] }}"
+			value="{{ data.value }}"
+			class="kirki-color-control"
+			data-id="{{ data['data-id'] }}"
+		/>
+		<button class="reset"><?php esc_html_e( 'Reset', 'kirki' ); ?></button>
+	</div>
+	<div class="kirki-colorpicker-wrapper-palette"></div>
+	<div class="kirki-colorpicker-wrapper colorpicker-{{ data['data-id'] }}"></div>
 </div>

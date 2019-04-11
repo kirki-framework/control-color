@@ -1,109 +1,166 @@
+/* global iro, iroTransparencyPlugin */
 var kirki = kirki || {};
 
 kirki.input = kirki.input || {};
 kirki.input.color = {
 
-    /**
-     * Init the control.
-     *
-     * @since 3.0.16
-     * @param {Object} control - The control object.
-     * @param {Object} control.id - The setting.
-     * @param {Object} control.choices - Additional options for the colorpickers.
-     * @param {Object} control.params - Control parameters.
-     * @param {Object} control.params.choices - alias for control.choices.
-     * @returns {null}
-     */
-    init: function( control ) {
-        var picker = jQuery( '.kirki-color-control[data-id="' + control.id + '"]' ),
-            clear;
+	/**
+	 * Init the control.
+	 *
+	 * @since 3.0.16
+	 * @param {Object} control - The control object.
+	 * @param {Object} control.id - The setting.
+	 * @param {Object} control.choices - Additional options for the colorpickers.
+	 * @param {Object} control.params - Control parameters.
+	 * @param {Object} control.params.choices - alias for control.choices.
+	 * @returns {null}
+	 */
+	init: function( control ) {
+		var colorPicker,
+			palette            = [],
+			containerWidth     = control.container.width(),
+			buttonLabel        = control.params.default ? control.params.choices.i18n.default : control.params.choices.i18n.clear,
+			isHue              = control.params.mode && 'hue' === control.params.mode,
+			colorpickerOptions = {
+				width: containerWidth
+			};
 
-        control.choices = control.choices || {};
-        if ( _.isEmpty( control.choices ) && control.params.choices ) {
-            control.choices = control.params.choices;
-        }
+		// Add default value to colorpicker options.
+		if ( control.params.default ) {
+			colorpickerOptions.color = control.params.default;
+		}
+console.log(control.params);
+		if ( control.params.palette ) {
+			if ( 'object' === typeof control.params.palette ) {
+				palette = control.params.palette;
+			} else if ( control.params.editorPalette && control.params.editorPalette[0] ) {
+				console.log( control.params.editorPalette );
+				_.each( control.params.editorPalette, function( color ) {
+					console.log(color);
+					jQuery( control.container.find( '.kirki-colorpicker-wrapper-palette' ) ).append( '<button style="background-color:' + color.color + ';" title="' + color.name + '"><span class="screen-reader-text">' + color.name + '</span></button>' );
+				});
+			} else {
+				palette = [ '#f78da7', '#cf2e2e', '#ff6900', '#fcb900', '#7bdcb5', '#00d084', '#8ed1fc', '#0693e3', '#eee' ,'#abb8c3', '#313131' ];
+			}
+		}
 
-        // If we have defined any extra choices, make sure they are passed-on to Iris.
-        if ( ! _.isEmpty( control.choices ) ) {
-            picker.wpColorPicker( control.choices );
-        }
+		_.each( palette, function( color ) {
+			jQuery( control.container.find( '.kirki-colorpicker-wrapper-palette' ) ).append( '<button style="background-color:' + color + ';" title="' + color + '"><span class="screen-reader-text">' + color + '</span></button>' );
+		}); 
 
-        // Tweaks to make the "clear" buttons work.
-        setTimeout( function() {
-            clear = jQuery( '.kirki-input-container[data-id="' + control.id + '"] .wp-picker-clear' );
-            if ( clear.length ) {
-                clear.click( function() {
-                    kirki.setting.set( control.id, '' );
-                } );
-            }
-        }, 200 );
+		if ( isHue ) {
+			palette                   = [];
+			colorpickerOptions.color  = { h: parseInt( control.params.value ), s: 100, l: 50 };
+			colorpickerOptions.layout = [
+				{
+					component: iro.ui.Slider,
+					options: {
+						sliderType: 'hue'
+					}
+				}
+			];
+		}
 
-        // Saves our settings to the WP API
-        picker.wpColorPicker( {
-            change: function() {
+		// Add label to the button.
+		control.container.find( '.reset' ).html( buttonLabel );
 
-                // Small hack: the picker needs a small delay
-                setTimeout( function() {
-                    kirki.setting.set( control.id, picker.val() );
-                }, 20 );
-            }
-        } );
-    }
+		// Add color to the previewer next to the input.
+		jQuery( control.container.find( '.toggle-colorpicker .placeholder' ) ).css( 'background-color', control.params.value );
+
+		// Check if we want transparency.
+		if ( 'true' === control.params.choices.alpha || true === control.params.choices.alpha ) {
+			iro.use( iroTransparencyPlugin );
+			colorpickerOptions.transparency = true;
+		}
+
+		colorPicker = new iro.ColorPicker( '.colorpicker-' + control.id, colorpickerOptions );
+
+		// Update color on colorpicker change.
+		colorPicker.on( 'color:change', function( color ) {
+			var value = ( 'undefined' !== typeof color.alpha && 1 > parseFloat( color.alpha ) ) ? color.rgbaString : color.hexString;
+			if ( isHue ) {
+				value = color.hsl.h;
+			}
+			control.container.find( 'input' ).attr( 'value', value );
+			if ( isHue ) {
+				jQuery( control.container.find( '.toggle-colorpicker .placeholder' ) ).css( 'background-color', 'hsl(' + value + ', 100%, 50%)' );
+			} else {
+				jQuery( control.container.find( '.toggle-colorpicker .placeholder' ) ).css( 'background-color', value );
+			}
+			kirki.setting.set( control.id, value );
+		});
+
+		// Update color when a value is manually entered.
+		control.container.find( 'input' ).on( 'change paste keyup', function() {
+			var value   = jQuery( this ).val();
+			if ( isHue ) {
+				colorPicker.updateColor( new iro.Color( { h: parseInt( value ), s: 100, l: 50 } ) );
+			} else if ( /^(\#[\da-f]{3}|\#[\da-f]{6}|\#[\da-f]{8}|rgba\(((\d{1,2}|1\d\d|2([0-4]\d|5[0-5]))\s*,\s*){2}((\d{1,2}|1\d\d|2([0-4]\d|5[0-5]))\s*)(,\s*(0\.\d+|1))\)|hsla\(\s*((\d{1,2}|[1-2]\d{2}|3([0-5]\d|60)))\s*,\s*((\d{1,2}|100)\s*%)\s*,\s*((\d{1,2}|100)\s*%)(,\s*(0\.\d+|1))\)|rgb\(((\d{1,2}|1\d\d|2([0-4]\d|5[0-5]))\s*,\s*){2}((\d{1,2}|1\d\d|2([0-4]\d|5[0-5]))\s*)|hsl\(\s*((\d{1,2}|[1-2]\d{2}|3([0-5]\d|60)))\s*,\s*((\d{1,2}|100)\s*%)\s*,\s*((\d{1,2}|100)\s*%)\))$/.test( value ) ) {
+				colorPicker.updateColor( new iro.Color( value ) );
+			}
+		});
+
+		// Toggle classes when we want to expand the pickers.
+		control.container.find( '.toggle-colorpicker' ).on( 'click', function( e ) {
+			e.preventDefault();
+			control.container.find( '.kirki-color-input-wrapper' ).toggleClass( 'collapsed' );
+		});
+	}
 };
 
 kirki.control = kirki.control || {};
 kirki.control['kirki-color'] = {
 
-    /**
-     * Init the control.
-     *
-     * @since 3.0.16
-     * @param {Object} control - The customizer control object.
-     * @returns {null}
-     */
-    init: function( control ) {
+	/**
+	 * Init the control.
+	 *
+	 * @since 3.0.16
+	 * @param {Object} control - The customizer control object.
+	 * @returns {null}
+	 */
+	init: function( control ) {
 
-        // Render the template.
-        this.template( control );
+		// Render the template.
+		this.template( control );
 
-        // Init the control.
-        kirki.input.color.init( control );
+		// Init the control.
+		kirki.input.color.init( control );
 
-    },
+	},
 
-    /**
-     * Render the template.
-     *
-     * @since 3.0.16
-     * @param {Object}     control - The customizer control object.
-     * @param {Object}     control.params - The control parameters.
-     * @param {string}     control.params.label - The control label.
-     * @param {string}     control.params.description - The control description.
-     * @param {string}     control.params.mode - The colorpicker mode. Can be 'full' or 'hue'.
-     * @param {bool|array} control.params.palette - false if we don't want a palette,
-     *                                              true to use the default palette,
-     *                                              array of custom hex colors if we want a custom palette.
-     * @param {string}     control.params.inputAttrs - extra input arguments.
-     * @param {string}     control.params.default - The default value.
-     * @param {Object}     control.params.choices - Any extra choices we may need.
-     * @param {boolean}    control.params.choices.alpha - should we add an alpha channel?
-     * @param {string}     control.id - The setting.
-     * @returns {null}
-     */
-    template: function( control ) {
-        var template = wp.template( 'kirki-input-color' );
-        control.container.html( template( {
-            label: control.params.label,
-            description: control.params.description,
-            'data-id': control.id,
-            mode: control.params.mode,
-            inputAttrs: control.params.inputAttrs,
-            'data-palette': control.params.palette,
-            'data-default-color': control.params.default,
-            'data-alpha': control.params.choices.alpha,
-            value: kirki.setting.get( control.id )
-        } ) );
-    }
+	/**
+	 * Render the template.
+	 *
+	 * @since 3.0.16
+	 * @param {Object}     control - The customizer control object.
+	 * @param {Object}     control.params - The control parameters.
+	 * @param {string}     control.params.label - The control label.
+	 * @param {string}     control.params.description - The control description.
+	 * @param {string}     control.params.mode - The colorpicker mode. Can be 'full' or 'hue'.
+	 * @param {bool|array} control.params.palette - false if we don't want a palette,
+	 *                                              true to use the default palette,
+	 *                                              array of custom hex colors if we want a custom palette.
+	 * @param {string}     control.params.inputAttrs - extra input arguments.
+	 * @param {string}     control.params.default - The default value.
+	 * @param {Object}     control.params.choices - Any extra choices we may need.
+	 * @param {boolean}    control.params.choices.alpha - should we add an alpha channel?
+	 * @param {string}     control.id - The setting.
+	 * @returns {null}
+	 */
+	template: function( control ) {
+		var template = wp.template( 'kirki-input-color' );
+		control.container.html( template( {
+			label: control.params.label,
+			description: control.params.description,
+			'data-id': control.id,
+			mode: control.params.mode,
+			inputAttrs: control.params.inputAttrs,
+			'data-palette': control.params.palette,
+			'data-default-color': control.params.default,
+			'data-alpha': control.params.choices.alpha,
+			value: kirki.setting.get( control.id )
+		} ) );
+	}
 };
 
 wp.customize.controlConstructor['kirki-color'] = wp.customize.kirkiDynamicControl.extend( {} );
