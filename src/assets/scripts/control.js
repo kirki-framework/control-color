@@ -21,15 +21,9 @@ kirki.input.color = {
 			buttonLabel        = control.params.default ? control.params.choices.i18n.default : control.params.choices.i18n.clear,
 			isHue              = control.params.mode && 'hue' === control.params.mode,
 			colorpickerOptions = {
-				width: containerWidth
+				width: containerWidth,
+				color: control.params.value ? control.params.value : control.params.default
 			};
-
-		// Add value to colorpicker options.
-		if ( control.params.value ) {
-			colorpickerOptions.color = control.params.value;
-		} else if ( control.params.default ) {
-			colorpickerOptions.color = control.params.default;
-		}
 
 		if ( isHue ) {
 			colorpickerOptions.color  = { h: parseInt( control.params.value ), s: 100, l: 50 };
