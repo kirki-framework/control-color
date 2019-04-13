@@ -51,7 +51,7 @@ data = _.defaults( data, {
 	</div>
 	<div class="kirki-colorpicker-wrapper colorpicker-{{ data['data-id'] }}"></div>
 	<div class="kirki-colorpicker-wrapper-palette">
-		<# if ( true === data['data-palette'] ) { #>
+		<# if ( 'hue' !== data.mode && true === data['data-palette'] ) { #>
 			<?php $editor_palette = current( (array) get_theme_support( 'editor-color-palette' ) ); ?>
 			<?php if ( ! empty( $editor_palette ) ) : ?>
 				<# var kirkiColorEditorPalette = <?php echo wp_strip_all_tags( json_encode( $editor_palette ) ); ?>; #>
