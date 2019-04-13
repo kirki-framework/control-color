@@ -49,6 +49,6 @@ data = _.defaults( data, {
 		/>
 		<button class="reset"><?php esc_html_e( 'Reset', 'kirki' ); ?></button>
 	</div>
-	<div class="kirki-colorpicker-wrapper-palette"></div>
 	<div class="kirki-colorpicker-wrapper colorpicker-{{ data['data-id'] }}"></div>
+	<div class="kirki-colorpicker-wrapper-palette"></div>
 </div>

@@ -95,7 +95,7 @@ class Color extends Base {
 		wp_enqueue_script( 'iro-transparency-plugin', URL::get_from_path( dirname( __DIR__ ) . '/assets/scripts/iro-transparency-plugin.js' ), [ 'iro' ], '1.0.2', true );
 
 		// Enqueue the control script.
-		wp_enqueue_script( 'kirki-control-color', URL::get_from_path( dirname( __DIR__ ) . '/assets/scripts/control.js' ), [ 'jquery', 'customize-base', 'customize-controls', 'wp-color-picker-alpha', 'kirki-dynamic-control' ], self::$control_ver, false );
+		wp_enqueue_script( 'kirki-control-color', URL::get_from_path( dirname( __DIR__ ) . '/assets/scripts/control.js' ), [ 'jquery', 'customize-base', 'customize-controls', 'iro', 'iro-transparency-plugin', 'kirki-dynamic-control' ], self::$control_ver, false );
 
 		// Enqueue the control style.
 		wp_enqueue_style( 'kirki-control-color-style', URL::get_from_path( dirname( __DIR__ ) . '/assets/styles/style.css' ), [], self::$control_ver );

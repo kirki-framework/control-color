@@ -29,24 +29,24 @@ kirki.input.color = {
 		if ( control.params.default ) {
 			colorpickerOptions.color = control.params.default;
 		}
-console.log(control.params);
+
 		if ( control.params.palette ) {
 			if ( 'object' === typeof control.params.palette ) {
 				palette = control.params.palette;
 			} else if ( control.params.editorPalette && control.params.editorPalette[0] ) {
 				console.log( control.params.editorPalette );
 				_.each( control.params.editorPalette, function( color ) {
-					console.log(color);
+					console.log( color );
 					jQuery( control.container.find( '.kirki-colorpicker-wrapper-palette' ) ).append( '<button style="background-color:' + color.color + ';" title="' + color.name + '"><span class="screen-reader-text">' + color.name + '</span></button>' );
-				});
+				} );
 			} else {
-				palette = [ '#f78da7', '#cf2e2e', '#ff6900', '#fcb900', '#7bdcb5', '#00d084', '#8ed1fc', '#0693e3', '#eee' ,'#abb8c3', '#313131' ];
+				palette = [ '#f78da7', '#cf2e2e', '#ff6900', '#fcb900', '#7bdcb5', '#00d084', '#8ed1fc', '#0693e3', '#eee', '#abb8c3', '#313131' ];
 			}
 		}
 
 		_.each( palette, function( color ) {
 			jQuery( control.container.find( '.kirki-colorpicker-wrapper-palette' ) ).append( '<button style="background-color:' + color + ';" title="' + color + '"><span class="screen-reader-text">' + color + '</span></button>' );
-		}); 
+		} );
 
 		if ( isHue ) {
 			palette                   = [];
@@ -57,6 +57,31 @@ console.log(control.params);
 					options: {
 						sliderType: 'hue'
 					}
+				}
+			];
+		} else {
+			colorpickerOptions.layout = [
+				{
+
+					// Hue slider.
+					component: iro.ui.Slider,
+					options: {
+						sliderType: 'hue'
+					}
+				},
+				{
+
+					// Saturation slider.
+					component: iro.ui.Slider,
+					options: {
+						sliderType: 'saturation'
+					}
+				},
+				{
+
+					// Regular value slider.
+					component: iro.ui.Slider,
+					options: {}
 				}
 			];
 		}
@@ -88,7 +113,7 @@ console.log(control.params);
 				jQuery( control.container.find( '.toggle-colorpicker .placeholder' ) ).css( 'background-color', value );
 			}
 			kirki.setting.set( control.id, value );
-		});
+		} );
 
 		// Update color when a value is manually entered.
 		control.container.find( 'input' ).on( 'change paste keyup', function() {
@@ -98,13 +123,13 @@ console.log(control.params);
 			} else if ( /^(\#[\da-f]{3}|\#[\da-f]{6}|\#[\da-f]{8}|rgba\(((\d{1,2}|1\d\d|2([0-4]\d|5[0-5]))\s*,\s*){2}((\d{1,2}|1\d\d|2([0-4]\d|5[0-5]))\s*)(,\s*(0\.\d+|1))\)|hsla\(\s*((\d{1,2}|[1-2]\d{2}|3([0-5]\d|60)))\s*,\s*((\d{1,2}|100)\s*%)\s*,\s*((\d{1,2}|100)\s*%)(,\s*(0\.\d+|1))\)|rgb\(((\d{1,2}|1\d\d|2([0-4]\d|5[0-5]))\s*,\s*){2}((\d{1,2}|1\d\d|2([0-4]\d|5[0-5]))\s*)|hsl\(\s*((\d{1,2}|[1-2]\d{2}|3([0-5]\d|60)))\s*,\s*((\d{1,2}|100)\s*%)\s*,\s*((\d{1,2}|100)\s*%)\))$/.test( value ) ) {
 				colorPicker.updateColor( new iro.Color( value ) );
 			}
-		});
+		} );
 
 		// Toggle classes when we want to expand the pickers.
 		control.container.find( '.toggle-colorpicker' ).on( 'click', function( e ) {
 			e.preventDefault();
 			control.container.find( '.kirki-color-input-wrapper' ).toggleClass( 'collapsed' );
-		});
+		} );
 	}
 };
 
