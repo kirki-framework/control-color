@@ -50,5 +50,29 @@ data = _.defaults( data, {
 		<button class="reset"><?php esc_html_e( 'Reset', 'kirki' ); ?></button>
 	</div>
 	<div class="kirki-colorpicker-wrapper colorpicker-{{ data['data-id'] }}"></div>
-	<div class="kirki-colorpicker-wrapper-palette"></div>
+	<div class="kirki-colorpicker-wrapper-palette">
+		<# if ( true === data['data-palette'] ) { #>
+			<?php $editor_palette = current( (array) get_theme_support( 'editor-color-palette' ) ); ?>
+			<?php if ( ! empty( $editor_palette ) ) : ?>
+				<# var kirkiColorEditorPalette = <?php echo wp_strip_all_tags( json_encode( $editor_palette ) ); ?>; #>
+				<# _.each( kirkiColorEditorPalette, function( paletteColor ) { #>
+					<button class="palette-color-{{ paletteColor.slug }}" style="background-color:{{ paletteColor.color }};" title="{{ paletteColor.name }}">
+						<span class="screen-reader-text">{{ paletteColor.name }}</span>
+					</button>
+				<# }); #>
+			<?php else : ?>
+				<# _.each( data.defaultPalette, function( paletteColor ) { #>
+					<button class="palette-color-{{ paletteColor }}" style="background-color:{{ paletteColor }};" title="{{ paletteColor }}">
+						<span class="screen-reader-text">{{ paletteColor }}</span>
+					</button>
+				<# }); #>
+			<?php endif; ?>
+		<# } else if ( 'object' === typeof data['data-palette'] ) { #>
+			<# _.each( data.data['data-palette'], function( paletteColor ) { #>
+				<button class="palette-color-{{ paletteColor }}" style="background-color:{{ paletteColor }};" title="{{ paletteColor }}">
+					<span class="screen-reader-text">{{ paletteColor }}</span>
+				</button>
+			<# }); #>
+		<# } #>
+	</div>
 </div>

@@ -17,7 +17,6 @@ kirki.input.color = {
 	 */
 	init: function( control ) {
 		var colorPicker,
-			palette            = [],
 			containerWidth     = control.container.width(),
 			buttonLabel        = control.params.default ? control.params.choices.i18n.default : control.params.choices.i18n.clear,
 			isHue              = control.params.mode && 'hue' === control.params.mode,
@@ -30,26 +29,7 @@ kirki.input.color = {
 			colorpickerOptions.color = control.params.default;
 		}
 
-		if ( control.params.palette ) {
-			if ( 'object' === typeof control.params.palette ) {
-				palette = control.params.palette;
-			} else if ( control.params.editorPalette && control.params.editorPalette[0] ) {
-				console.log( control.params.editorPalette );
-				_.each( control.params.editorPalette, function( color ) {
-					console.log( color );
-					jQuery( control.container.find( '.kirki-colorpicker-wrapper-palette' ) ).append( '<button style="background-color:' + color.color + ';" title="' + color.name + '"><span class="screen-reader-text">' + color.name + '</span></button>' );
-				} );
-			} else {
-				palette = [ '#f78da7', '#cf2e2e', '#ff6900', '#fcb900', '#7bdcb5', '#00d084', '#8ed1fc', '#0693e3', '#eee', '#abb8c3', '#313131' ];
-			}
-		}
-
-		_.each( palette, function( color ) {
-			jQuery( control.container.find( '.kirki-colorpicker-wrapper-palette' ) ).append( '<button style="background-color:' + color + ';" title="' + color + '"><span class="screen-reader-text">' + color + '</span></button>' );
-		} );
-
 		if ( isHue ) {
-			palette                   = [];
 			colorpickerOptions.color  = { h: parseInt( control.params.value ), s: 100, l: 50 };
 			colorpickerOptions.layout = [
 				{
@@ -183,7 +163,8 @@ kirki.control['kirki-color'] = {
 			'data-palette': control.params.palette,
 			'data-default-color': control.params.default,
 			'data-alpha': control.params.choices.alpha,
-			value: kirki.setting.get( control.id )
+			value: kirki.setting.get( control.id ),
+			defaultPalette: control.params.defaultPalette
 		} ) );
 	}
 };

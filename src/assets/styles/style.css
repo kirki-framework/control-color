@@ -56,10 +56,10 @@
   display: flex;
   margin-top: 12px; }
   .customize-control-kirki-color .kirki-colorpicker-wrapper-palette button {
-    width: 100%;
+    width: 28px;
     border: 1px solid rgba(0, 0, 0, 0.2);
     box-shadow: none;
-    height: 20px;
+    height: 28px;
     margin-right: 4px;
     border-radius: 3px; }
     .customize-control-kirki-color .kirki-colorpicker-wrapper-palette button:last-child {

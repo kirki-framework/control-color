@@ -44,7 +44,7 @@ class Color extends Base {
 	 *
 	 * @access public
 	 * @since 1.0
-	 * @var bool
+	 * @var array|bool
 	 */
 	public $palette = true;
 
@@ -96,6 +96,7 @@ class Color extends Base {
 
 		// Enqueue the control script.
 		wp_enqueue_script( 'kirki-control-color', URL::get_from_path( dirname( __DIR__ ) . '/assets/scripts/control.js' ), [ 'jquery', 'customize-base', 'customize-controls', 'iro', 'iro-transparency-plugin', 'kirki-dynamic-control' ], self::$control_ver, false );
+		global $_wp_theme_features;
 
 		// Enqueue the control style.
 		wp_enqueue_style( 'kirki-control-color-style', URL::get_from_path( dirname( __DIR__ ) . '/assets/styles/style.css' ), [], self::$control_ver );
@@ -133,6 +134,6 @@ class Color extends Base {
 			'default' => esc_html__( 'Default', 'kirki' ),
 			'clear'   => esc_html__( 'Clear', 'kirki' ),
 		];
-		$this->json['editorPalette'] = get_theme_support( 'editor-color-palette' );
+		$this->json['defaultPalette'] = [ '#f78da7', '#cf2e2e', '#ff6900', '#fcb900', '#7bdcb5', '#00d084', '#8ed1fc', '#0693e3', '#eee', '#abb8c3', '#313131' ];
 	}
 }
