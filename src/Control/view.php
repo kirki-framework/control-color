@@ -33,7 +33,7 @@ data = _.defaults( data, {
 		<# } #>
 	</label>
 	<div class="kirki-color-input-wrapper collapsed mode-{{ data.mode }}">
-		<button class="toggle-colorpicker">
+		<button class="toggle-colorpicker" title="<?php esc_attr_e( 'Select Color', 'kirki' ); ?>">
 			<span class="screen-reader-text"><?php esc_html_e( 'Select Color', 'kirki' ); ?></span>
 			<span class="placeholder"></span>
 		</button>

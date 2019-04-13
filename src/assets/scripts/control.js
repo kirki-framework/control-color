@@ -22,9 +22,8 @@ kirki.input.color = {
 			isHue              = control.params.mode && 'hue' === control.params.mode,
 			colorpickerOptions = {
 				width: containerWidth,
-				color: control.params.value ? control.params.value : control.params.default
+				color: control.params.value
 			};
-
 		if ( isHue ) {
 			colorpickerOptions.color  = { h: parseInt( control.params.value ), s: 100, l: 50 };
 			colorpickerOptions.layout = [
@@ -96,8 +95,10 @@ kirki.input.color = {
 			var value   = jQuery( this ).val();
 			if ( isHue ) {
 				colorPicker.updateColor( new iro.Color( { h: parseInt( value ), s: 100, l: 50 } ) );
+				colorPicker.color.set( 'hsl(' + parseInt( value ) + ',100%,50%)' );
 			} else if ( /^(\#[\da-f]{3}|\#[\da-f]{6}|\#[\da-f]{8}|rgba\(((\d{1,2}|1\d\d|2([0-4]\d|5[0-5]))\s*,\s*){2}((\d{1,2}|1\d\d|2([0-4]\d|5[0-5]))\s*)(,\s*(0\.\d+|1))\)|hsla\(\s*((\d{1,2}|[1-2]\d{2}|3([0-5]\d|60)))\s*,\s*((\d{1,2}|100)\s*%)\s*,\s*((\d{1,2}|100)\s*%)(,\s*(0\.\d+|1))\)|rgb\(((\d{1,2}|1\d\d|2([0-4]\d|5[0-5]))\s*,\s*){2}((\d{1,2}|1\d\d|2([0-4]\d|5[0-5]))\s*)|hsl\(\s*((\d{1,2}|[1-2]\d{2}|3([0-5]\d|60)))\s*,\s*((\d{1,2}|100)\s*%)\s*,\s*((\d{1,2}|100)\s*%)\))$/.test( value ) ) {
 				colorPicker.updateColor( new iro.Color( value ) );
+				colorPicker.color.set( value );
 			}
 		} );
 
@@ -105,6 +106,24 @@ kirki.input.color = {
 		control.container.find( '.palette-color' ).on( 'click', function( e ) {
 			e.preventDefault();
 			colorPicker.updateColor( new iro.Color( jQuery( this ).data( 'color' ) ) );
+			colorPicker.color.set( jQuery( this ).data( 'color' ) );
+		});
+
+		// Handle clicking on the reset button.
+		control.container.find( '.reset' ).on( 'click', function( e ) {
+			e.preventDefault();
+			if ( ! control.params.default ) {
+				kirki.setting.set( control.id, '' );
+				setTimeout( function() {
+					colorPicker.updateColor( new iro.Color( 'rgba(0,0,0,0)' ) );
+					colorPicker.color.set( 'rgba(0,0,0,0)' );
+					control.container.find( 'input' ).attr( 'value', '' );
+					jQuery( control.container.find( '.toggle-colorpicker .placeholder' ) ).css( 'background-color', '' );
+				}, 50 );
+			} else {
+				colorPicker.updateColor( new iro.Color( control.params.default ) );
+				colorPicker.color.set( control.params.default );
+			}
 		});
 
 		// Toggle classes when we want to expand the pickers.
