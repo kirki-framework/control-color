@@ -24,8 +24,10 @@ kirki.input.color = {
 				width: containerWidth
 			};
 
-		// Add default value to colorpicker options.
-		if ( control.params.default ) {
+		// Add value to colorpicker options.
+		if ( control.params.value ) {
+			colorpickerOptions.color = control.params.value;
+		} else if ( control.params.default ) {
 			colorpickerOptions.color = control.params.default;
 		}
 
@@ -104,6 +106,12 @@ kirki.input.color = {
 				colorPicker.updateColor( new iro.Color( value ) );
 			}
 		} );
+
+		// Handle clicks on palette colors.
+		control.container.find( '.palette-color' ).on( 'click', function( e ) {
+			e.preventDefault();
+			colorPicker.updateColor( new iro.Color( jQuery( this ).data( 'color' ) ) );
+		});
 
 		// Toggle classes when we want to expand the pickers.
 		control.container.find( '.toggle-colorpicker' ).on( 'click', function( e ) {

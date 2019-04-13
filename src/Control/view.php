@@ -56,20 +56,20 @@ data = _.defaults( data, {
 			<?php if ( ! empty( $editor_palette ) ) : ?>
 				<# var kirkiColorEditorPalette = <?php echo wp_strip_all_tags( json_encode( $editor_palette ) ); ?>; #>
 				<# _.each( kirkiColorEditorPalette, function( paletteColor ) { #>
-					<button class="palette-color-{{ paletteColor.slug }}" style="background-color:{{ paletteColor.color }};" title="{{ paletteColor.name }}">
+					<button class="palette-color palette-color-{{ paletteColor.slug }}" style="background-color:{{ paletteColor.color }};" title="{{ paletteColor.name }}" data-color="{{ paletteColor.color }}">
 						<span class="screen-reader-text">{{ paletteColor.name }}</span>
 					</button>
 				<# }); #>
 			<?php else : ?>
 				<# _.each( data.defaultPalette, function( paletteColor ) { #>
-					<button class="palette-color-{{ paletteColor }}" style="background-color:{{ paletteColor }};" title="{{ paletteColor }}">
+					<button class="palette-color palette-color-{{ paletteColor }}" style="background-color:{{ paletteColor }};" title="{{ paletteColor }}" data-color="{{ paletteColor }}">
 						<span class="screen-reader-text">{{ paletteColor }}</span>
 					</button>
 				<# }); #>
 			<?php endif; ?>
 		<# } else if ( 'object' === typeof data['data-palette'] ) { #>
 			<# _.each( data.data['data-palette'], function( paletteColor ) { #>
-				<button class="palette-color-{{ paletteColor }}" style="background-color:{{ paletteColor }};" title="{{ paletteColor }}">
+				<button class="palette-color palette-color-{{ paletteColor }}" style="background-color:{{ paletteColor }};" title="{{ paletteColor }}" data-color="{{ paletteColor }}">
 					<span class="screen-reader-text">{{ paletteColor }}</span>
 				</button>
 			<# }); #>
