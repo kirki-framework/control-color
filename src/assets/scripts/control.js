@@ -38,11 +38,11 @@ kirki.input.color = {
 				options: {
 					sliderType: 'saturation'
 				}
-			});
+			} );
 			colorpickerOptions.layout.push( { // Regular value slider.
 				component: iro.ui.Slider,
 				options: {}
-			});
+			} );
 		}
 
 		// Check if we want transparency.
@@ -91,7 +91,7 @@ kirki.input.color = {
 			e.preventDefault();
 			colorPicker.updateColor( new iro.Color( jQuery( this ).data( 'color' ) ) );
 			colorPicker.color.set( jQuery( this ).data( 'color' ) );
-		});
+		} );
 
 		// Handle clicking on the reset button.
 		control.container.find( '.reset' ).on( 'click', function( e ) {
@@ -108,7 +108,7 @@ kirki.input.color = {
 				colorPicker.updateColor( new iro.Color( control.params.default ) );
 				colorPicker.color.set( control.params.default );
 			}
-		});
+		} );
 
 		// Toggle classes when we want to expand the pickers.
 		control.container.find( '.toggle-colorpicker' ).on( 'click', function( e ) {
@@ -119,7 +119,7 @@ kirki.input.color = {
 		// If we click on the text input expand the colorpicker.
 		control.container.find( 'input' ).on( 'click', function() {
 			control.container.find( '.kirki-color-input-wrapper' ).removeClass( 'collapsed' );
-		});
+		} );
 	}
 };
 
