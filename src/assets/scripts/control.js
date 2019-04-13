@@ -22,43 +22,33 @@ kirki.input.color = {
 			isHue              = control.params.mode && 'hue' === control.params.mode,
 			colorpickerOptions = {
 				width: containerWidth,
-				color: control.params.value
+				color: isHue ? { h: parseInt( control.params.value ), s: 100, l: 50 } : control.params.value,
+				layout: [
+					{
+						component: iro.ui.Slider,
+						options: {
+							sliderType: 'hue'
+						}
+					}
+				]
 			};
-		if ( isHue ) {
-			colorpickerOptions.color  = { h: parseInt( control.params.value ), s: 100, l: 50 };
-			colorpickerOptions.layout = [
-				{
-					component: iro.ui.Slider,
-					options: {
-						sliderType: 'hue'
-					}
+		if ( ! isHue ) {
+			colorpickerOptions.layout.push( { // Saturation slider.
+				component: iro.ui.Slider,
+				options: {
+					sliderType: 'saturation'
 				}
-			];
-		} else {
-			colorpickerOptions.layout = [
-				{
+			});
+			colorpickerOptions.layout.push( { // Regular value slider.
+				component: iro.ui.Slider,
+				options: {}
+			});
+		}
 
-					// Hue slider.
-					component: iro.ui.Slider,
-					options: {
-						sliderType: 'hue'
-					}
-				},
-				{
-
-					// Saturation slider.
-					component: iro.ui.Slider,
-					options: {
-						sliderType: 'saturation'
-					}
-				},
-				{
-
-					// Regular value slider.
-					component: iro.ui.Slider,
-					options: {}
-				}
-			];
+		// Check if we want transparency.
+		if ( 'true' === control.params.choices.alpha || true === control.params.choices.alpha ) {
+			iro.use( iroTransparencyPlugin );
+			colorpickerOptions.transparency = true;
 		}
 
 		// Add label to the button.
@@ -66,12 +56,6 @@ kirki.input.color = {
 
 		// Add color to the previewer next to the input.
 		jQuery( control.container.find( '.toggle-colorpicker .placeholder' ) ).css( 'background-color', control.params.value );
-
-		// Check if we want transparency.
-		if ( 'true' === control.params.choices.alpha || true === control.params.choices.alpha ) {
-			iro.use( iroTransparencyPlugin );
-			colorpickerOptions.transparency = true;
-		}
 
 		colorPicker = new iro.ColorPicker( '.colorpicker-' + control.id, colorpickerOptions );
 
@@ -131,6 +115,11 @@ kirki.input.color = {
 			e.preventDefault();
 			control.container.find( '.kirki-color-input-wrapper' ).toggleClass( 'collapsed' );
 		} );
+
+		// If we click on the text input expand the colorpicker.
+		control.container.find( 'input' ).on( 'click', function() {
+			control.container.find( '.kirki-color-input-wrapper' ).removeClass( 'collapsed' );
+		});
 	}
 };
 
