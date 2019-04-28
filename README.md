@@ -56,3 +56,9 @@ add_action( 'customize_register', function( $wp_customize ) {
 	] ) );
 } );
 ```
+
+To update the node modules:
+
+```
+rm -rf node_modules && npm install --only=production
+```

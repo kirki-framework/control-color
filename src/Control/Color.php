@@ -135,8 +135,13 @@ class Color extends Base {
 	protected function content_template() {
 		?>
 		<#
-		data.choices = data.choices || {};
+		data.choices       = data.choices || {};
 		data.choices.alpha = data.choices.alpha || false;
+		data.value         = data.value.toString().toLowerCase();
+		if ( 0 === data.value.indexOf( '#' ) && 4 === data.value.split( '' ).length ) {
+			data.value = '#' + data.value.split( '' )[1] + data.value.split( '' )[1] + data.value.split( '' )[2] + data.value.split( '' )[2] + data.value.split( '' )[3] + data.value.split( '' )[3]
+		}
+		var hasPaletteColorSelected = false;
 		#>
 		<label>
 			<# if ( data.label ) { #>
@@ -146,55 +151,92 @@ class Color extends Base {
 				<span class="description customize-control-description">{{{ data.description }}}</span>
 			<# } #>
 		</label>
-		<div class="kirki-color-input-wrapper collapsed mode-{{ data.mode }}">
-			<button class="toggle-colorpicker" title="<?php esc_attr_e( 'Select Color', 'kirki' ); ?>">
-				<span class="screen-reader-text"><?php esc_html_e( 'Select Color', 'kirki' ); ?></span>
-				<span class="placeholder"></span>
-			</button>
-			<input
-				type = "text"
-				data-type="{{ data.mode }}"
-				{{{ data.inputAttrs }}}
-				data-default-color="{{ data.default }}"
-				value="{{ data.value }}"
-				class="kirki-color-control<# if ( 'hue' === data.mode ) {#> screen-reader-text<# } #>"
-				data-id="{{ data.id }}"
-				{{ data.link }}
-			/>
-			<button class="reset">
-				<# if ( ! data.default ) { #>
-					<?php esc_html_e( 'Clear', 'kirki' ); ?>
-				<# } else { #>
-					<?php esc_html_e( 'Default', 'kirki' ); ?>
-				<# } #>
-			</button>
-		</div>
-		<div class="kirki-colorpicker-wrapper colorpicker-{{ data.id.replace( '[', '--' ).replace( ']', '' ) }}"></div>
+
+		<!-- The palette. -->
 		<div class="kirki-colorpicker-wrapper-palette">
 			<# if ( 'hue' !== data.mode && true === data.palette ) { #>
 				<?php $editor_palette = current( (array) get_theme_support( 'editor-color-palette' ) ); ?>
 				<?php if ( ! empty( $editor_palette ) ) : ?>
-					<# var kirkiColorEditorPalette = <?php echo wp_strip_all_tags( wp_json_encode( $editor_palette ) ); // phpcs:ignore WordPress.Security.EscapeOutput ?>; #>
+					<#	var kirkiColorEditorPalette = <?php echo wp_strip_all_tags( wp_json_encode( $editor_palette ) ) // phpcs:ignore WordPress.Security.EscapeOutput ?>; #>
+
 					<# _.each( kirkiColorEditorPalette, function( paletteColor ) { #>
-						<button class="palette-color palette-color-{{ paletteColor.slug }}" style="background-color:{{ paletteColor.color }};" title="{{ paletteColor.name }}" data-color="{{ paletteColor.color }}">
-							<span class="screen-reader-text">{{ paletteColor.name }}</span>
-						</button>
+						<div class="color-button-wrapper">
+							<#
+							paletteColor.color = paletteColor.color.toLowerCase();
+							if ( 0 === paletteColor.color.indexOf( '#' ) && 4 === paletteColor.color.split( '' ).length ) {
+								paletteColor.color = '#' + paletteColor.color.split( '' )[1] + paletteColor.color.split( '' )[1] + paletteColor.color.split( '' )[2] + paletteColor.color.split( '' )[2] + paletteColor.color.split( '' )[3] + paletteColor.color.split( '' )[3]
+							}
+
+							var selected = ( data.value === paletteColor.color );
+							if ( selected ) {
+								hasPaletteColorSelected = true;
+							}
+							#>
+							<button
+								class="palette-color palette-color-{{ paletteColor.slug }}"
+								style="color:{{ paletteColor.color }};"
+								data-color="{{ paletteColor.color }}"
+								aria-label="<?php printf(
+									/* translators: the color name. */
+									esc_attr_e( 'Color: %s', 'kirki' ),
+									'{{ paletteColor.name }}'
+								); ?>"
+								aria-pressed="{{ selected }}"
+								>
+								<svg aria-hidden="true" role="img" focusable="false" class="dashicon dashicons-saved" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20"><path d="M15.3 5.3l-6.8 6.8-2.8-2.8-1.4 1.4 4.2 4.2 8.2-8.2"></path></svg>
+							</button>
+						</div>
 					<# }); #>
 				<?php else : ?>
 					<# _.each( data.defaultPalette, function( paletteColor ) { #>
-						<button class="palette-color palette-color-{{ paletteColor }}" style="background-color:{{ paletteColor }};" title="{{ paletteColor }}" data-color="{{ paletteColor }}">
+						<button class="palette-color palette-color-{{ paletteColor }}" style="color:{{ paletteColor }};" title="{{ paletteColor }}" data-color="{{ paletteColor }}">
 							<span class="screen-reader-text">{{ paletteColor }}</span>
 						</button>
 					<# }); #>
 				<?php endif; ?>
 			<# } else if ( 'object' === typeof data.palette ) { #>
-				<# _.each( data.data.palette, function( paletteColor ) { #>
-					<button class="palette-color palette-color-{{ paletteColor }}" style="background-color:{{ paletteColor }};" title="{{ paletteColor }}" data-color="{{ paletteColor }}">
+				<# _.each( data.palette, function( paletteColor ) { #>
+					<button class="palette-color palette-color-{{ paletteColor }}" style="color:{{ paletteColor }};" title="{{ paletteColor }}" data-color="{{ paletteColor }}">
 						<span class="screen-reader-text">{{ paletteColor }}</span>
 					</button>
 				<# }); #>
 			<# } #>
 		</div>
+
+		<details class="kirki-color-input-wrapper mode-{{ data.mode }}" <# if ( 'hue' === data.mode ) { #>open<# } #>>
+			<summary>
+				<span>
+					<div class="color-button-wrapper">
+						<button
+							class="palette-color placeholder color-preview"
+							style="color:{{ data.value }};"
+							data-color="{{ data.value }}"
+							aria-label="<?php printf(
+								esc_attr_e( 'Color: %s', 'kirki' ),
+								'{{ data.value }}'
+							); ?>"
+							aria-pressed="{{ ! hasPaletteColorSelected }}"
+							>
+							<svg aria-hidden="true" role="img" focusable="false" class="dashicon dashicons-saved" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20"><path d="M15.3 5.3l-6.8 6.8-2.8-2.8-1.4 1.4 4.2 4.2 8.2-8.2"></path></svg>
+						</button>
+					</div>
+				</span>
+				<span class="summary-description">
+					<?php esc_html_e( 'Custom Color', 'kirki' ); ?>
+				</span>
+				<input
+					type = "text"
+					data-type="{{ data.mode }}"
+					{{{ data.inputAttrs }}}
+					data-default-color="{{ data.default }}"
+					value="{{ data.value }}"
+					class="kirki-color-control<# if ( 'hue' === data.mode ) {#> screen-reader-text<# } #>"
+					data-id="{{ data.id }}"
+					{{ data.link }}
+				/>
+			</summary>
+			<div class="kirki-colorpicker-wrapper colorpicker-{{ data.id.replace( '[', '--' ).replace( ']', '' ) }}">
+		</details>
 		<?php
 	}
 }
