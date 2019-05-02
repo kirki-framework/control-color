@@ -5,7 +5,7 @@
  * @package   kirki-framework/control-color
  * @copyright Copyright (c) 2019, Ari Stathopoulos (@aristath)
  * @license   https://opensource.org/licenses/MIT
- * @since     1.0
+ * @since     0.1
  */
 
 namespace Kirki\Control;
@@ -16,7 +16,7 @@ use Kirki\URL;
 /**
  * Adds a color & color-alpha control
  *
- * @since 1.0
+ * @since 0.1
  */
 class Color extends Base {
 
@@ -24,7 +24,7 @@ class Color extends Base {
 	 * The control type.
 	 *
 	 * @access public
-	 * @since 1.0
+	 * @since 0.1
 	 * @var string
 	 */
 	public $type = 'kirki-color';
@@ -34,16 +34,16 @@ class Color extends Base {
 	 *
 	 * @static
 	 * @access public
-	 * @since 1.0.2
+	 * @since 0.1
 	 * @var string
 	 */
-	public static $control_ver = '1.0.7';
+	public static $control_ver = '0.1';
 
 	/**
 	 * Colorpicker palette
 	 *
 	 * @access public
-	 * @since 1.0
+	 * @since 0.1
 	 * @var array|bool
 	 */
 	public $palette = true;
@@ -52,7 +52,7 @@ class Color extends Base {
 	 * Mode.
 	 *
 	 * @access public
-	 * @since 1.0
+	 * @since 0.1
 	 * @var string
 	 */
 	public $mode = 'full';
@@ -62,7 +62,7 @@ class Color extends Base {
 	 *
 	 * @static
 	 * @access private
-	 * @since 1.0.1
+	 * @since 0.1
 	 * @var bool
 	 */
 	private static $template_added = false;
@@ -71,7 +71,7 @@ class Color extends Base {
 	 * Enqueue control related scripts/styles.
 	 *
 	 * @access public
-	 * @since 1.0
+	 * @since 0.1
 	 * @return void
 	 */
 	public function enqueue() {
@@ -79,7 +79,7 @@ class Color extends Base {
 
 		// Enqueue iro.
 		wp_enqueue_script( 'iro', URL::get_from_path( dirname( dirname( __DIR__ ) ) . '/node_modules/@jaames/iro/dist/iro.min.js' ), [], '4.3.3', true );
-		wp_enqueue_script( 'iro-transparency-plugin', URL::get_from_path( dirname( dirname( __DIR__ ) ) . '/node_modules/iro-transparency-plugin/dist/iro-transparency-plugin.min.js' ), [ 'iro' ], '1.0.2', true );
+		wp_enqueue_script( 'iro-transparency-plugin', URL::get_from_path( dirname( dirname( __DIR__ ) ) . '/node_modules/iro-transparency-plugin/dist/iro-transparency-plugin.min.js' ), [ 'iro' ], '0.1.2', true );
 
 		// Enqueue the control script.
 		wp_enqueue_script( 'kirki-control-color', URL::get_from_path( dirname( __DIR__ ) . '/assets/scripts/control.js' ), [ 'jquery', 'customize-base', 'customize-controls', 'iro', 'iro-transparency-plugin', 'kirki-dynamic-control' ], self::$control_ver, false );
@@ -97,7 +97,7 @@ class Color extends Base {
 	 *
 	 * @static
 	 * @access public
-	 * @since 1.0.6
+	 * @since 0.1
 	 * @return string
 	 */
 	public static function get_control_path_url() {
@@ -108,7 +108,7 @@ class Color extends Base {
 	 * Refresh the parameters passed to the JavaScript via JSON.
 	 *
 	 * @access public
-	 * @since 1.0
+	 * @since 0.1
 	 * @return void
 	 */
 	public function to_json() {
@@ -129,7 +129,7 @@ class Color extends Base {
 	 * @see WP_Customize_Control::print_template()
 	 *
 	 * @access protected
-	 * @since 1.0.8
+	 * @since 0.1
 	 * @return void
 	 */
 	protected function content_template() {

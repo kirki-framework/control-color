@@ -55,7 +55,7 @@ wp.customize.controlConstructor['kirki-color'] = wp.customize.kirkiDynamicContro
 	/**
 	 * Re-calculate which color element is ActiveXObject, and toggle it.
 	 *
-	 * @since 1.1
+	 * @since 0.1
 	 * @param {string} value - The color we want to check.
 	 * @return void
 	 */
@@ -85,7 +85,7 @@ wp.customize.controlConstructor['kirki-color'] = wp.customize.kirkiDynamicContro
 	/**
 	 * Init colorpicker.
 	 *
-	 * @since 1.1
+	 * @since 0.1
 	 * @param {Object} control - The control object.
 	 * @return {void}
 	 */
@@ -127,7 +127,7 @@ wp.customize.controlConstructor['kirki-color'] = wp.customize.kirkiDynamicContro
 	/**
 	 * Get the parameters for our colorpicker.
 	 *
-	 * @since 1.1
+	 * @since 0.1
 	 * @param {Object} control - The control object.
 	 * @returns {Object}
 	 */
