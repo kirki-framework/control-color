@@ -27,6 +27,11 @@ wp.customize.controlConstructor['kirki-color'] = wp.customize.kirkiDynamicContro
 		control.container.find( '.palette-color' ).on( 'click', function( e ) {
 			e.preventDefault();
 
+			// Don't change value if we just clicked on the colorpicker icon.
+			if ( jQuery( this ).hasClass( 'color-preview' ) ) {
+				return;
+			}
+
 			// Set the value.
 			colorPicker.updateColor( new iro.Color( jQuery( this ).data( 'color' ) ) );
 			colorPicker.color.set( jQuery( this ).data( 'color' ) );
@@ -110,7 +115,7 @@ wp.customize.controlConstructor['kirki-color'] = wp.customize.kirkiDynamicContro
 			control.container.find( '.kirki-color-control' ).attr( 'value', value ).trigger( 'change' );
 			control.setting.set( value );
 			if ( ! control.params.mode || 'hue' !== control.params.mode ) {
-				jQuery( control.container.find( '.placeholder.color-preview' ) ).css( 'color', value );
+				jQuery( control.container.find( '.placeholder.color-preview .button-inner' ) ).css( 'color', value );
 			}
 
 			control.reCalcActive( color.hexString, control );
@@ -132,31 +137,28 @@ wp.customize.controlConstructor['kirki-color'] = wp.customize.kirkiDynamicContro
 
 		control            = control || this;
 		isHue              = control.params.mode && 'hue' === control.params.mode;
+
+		// If we only want hue, return a simple slider.
+		if ( isHue ) {
+			return {
+				width: control.container.width(),
+				color: { h: parseInt( control.params.value ), s: 100, l: 50 },
+				layout: [
+					{
+						component: iro.ui.Slider,
+						options: {
+							sliderType: 'hue'
+						}
+					}
+				]
+			};	
+		}
+
 		colorpickerOptions = {
 			width: control.container.width(),
-			color: isHue ? { h: parseInt( control.params.value ), s: 100, l: 50 } : control.params.value,
-			layout: [
-				{
-					component: iro.ui.Slider,
-					options: {
-						sliderType: 'hue'
-					}
-				}
-			]
+			color: control.params.value,
+			wheelLightness: false
 		};
-
-		if ( ! isHue ) {
-			colorpickerOptions.layout.push( { // Saturation slider.
-				component: iro.ui.Slider,
-				options: {
-					sliderType: 'saturation'
-				}
-			} );
-			colorpickerOptions.layout.push( { // Regular value slider.
-				component: iro.ui.Slider,
-				options: {}
-			} );
-		}
 
 		// Check if we want transparency.
 		if ( 'true' === control.params.choices.alpha || true === control.params.choices.alpha ) {

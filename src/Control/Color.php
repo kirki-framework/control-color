@@ -160,32 +160,31 @@ class Color extends Base {
 					<#	var kirkiColorEditorPalette = <?php echo wp_strip_all_tags( wp_json_encode( $editor_palette ) ) // phpcs:ignore WordPress.Security.EscapeOutput ?>; #>
 
 					<# _.each( kirkiColorEditorPalette, function( paletteColor ) { #>
-						<div class="color-button-wrapper">
-							<#
-							paletteColor.color = paletteColor.color.toLowerCase();
-							if ( 0 === paletteColor.color.indexOf( '#' ) && 4 === paletteColor.color.split( '' ).length ) {
-								paletteColor.color = '#' + paletteColor.color.split( '' )[1] + paletteColor.color.split( '' )[1] + paletteColor.color.split( '' )[2] + paletteColor.color.split( '' )[2] + paletteColor.color.split( '' )[3] + paletteColor.color.split( '' )[3]
-							}
+						<#
+						paletteColor.color = paletteColor.color.toLowerCase();
+						if ( 0 === paletteColor.color.indexOf( '#' ) && 4 === paletteColor.color.split( '' ).length ) {
+							paletteColor.color = '#' + paletteColor.color.split( '' )[1] + paletteColor.color.split( '' )[1] + paletteColor.color.split( '' )[2] + paletteColor.color.split( '' )[2] + paletteColor.color.split( '' )[3] + paletteColor.color.split( '' )[3]
+						}
 
-							var selected = ( data.value === paletteColor.color );
-							if ( selected ) {
-								hasPaletteColorSelected = true;
-							}
-							#>
-							<button
-								class="palette-color palette-color-{{ paletteColor.slug }}"
-								style="color:{{ paletteColor.color }};"
-								data-color="{{ paletteColor.color }}"
-								aria-label="<?php printf(
-									/* translators: the color name. */
-									esc_attr_e( 'Color: %s', 'kirki' ),
-									'{{ paletteColor.name }}'
-								); ?>"
-								aria-pressed="{{ selected }}"
-								>
+						var selected = ( data.value === paletteColor.color );
+						if ( selected ) {
+							hasPaletteColorSelected = true;
+						}
+						#>
+						<button
+							class="palette-color palette-color-{{ paletteColor.slug }}"
+							data-color="{{ paletteColor.color }}"
+							aria-label="<?php printf(
+								/* translators: the color name. */
+								esc_attr_e( 'Color: %s', 'kirki' ),
+								'{{ paletteColor.name }}'
+							); ?>"
+							aria-pressed="{{ selected }}"
+							>
+							<span class="button-inner" style="color:{{ paletteColor.color }};">
 								<svg aria-hidden="true" role="img" focusable="false" class="dashicon dashicons-saved" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20"><path d="M15.3 5.3l-6.8 6.8-2.8-2.8-1.4 1.4 4.2 4.2 8.2-8.2"></path></svg>
-							</button>
-						</div>
+							</span>
+						</button>
 					<# }); #>
 				<?php else : ?>
 					<# _.each( data.defaultPalette, function( paletteColor ) { #>
@@ -206,23 +205,22 @@ class Color extends Base {
 		<details class="kirki-color-input-wrapper mode-{{ data.mode }}" <# if ( 'hue' === data.mode ) { #>open<# } #>>
 			<summary>
 				<span>
-					<div class="color-button-wrapper">
-						<button
-							class="palette-color placeholder color-preview"
-							style="color:{{ data.value }};"
-							data-color="{{ data.value }}"
-							aria-label="<?php printf(
-								esc_attr_e( 'Color: %s', 'kirki' ),
-								'{{ data.value }}'
-							); ?>"
-							aria-pressed="{{ ! hasPaletteColorSelected }}"
-							>
+					<button
+						class="palette-color placeholder color-preview"
+						data-color="{{ data.value }}"
+						aria-label="<?php printf(
+							esc_attr_e( 'Color: %s', 'kirki' ),
+							'{{ data.value }}'
+						); ?>"
+						aria-pressed="{{ ! hasPaletteColorSelected }}"
+						>
+						<span class="button-inner" style="color:{{ data.value }};">
 							<svg aria-hidden="true" role="img" focusable="false" class="dashicon dashicons-saved" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20"><path d="M15.3 5.3l-6.8 6.8-2.8-2.8-1.4 1.4 4.2 4.2 8.2-8.2"></path></svg>
-						</button>
-					</div>
+						</span>
+					</button>
 				</span>
 				<span class="summary-description">
-					<?php esc_html_e( 'Custom Color', 'kirki' ); ?>
+					<?php esc_html_e( 'Select Color', 'kirki' ); ?>
 				</span>
 				<input
 					type = "text"

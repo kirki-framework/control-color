@@ -10,7 +10,7 @@
     margin-top: 12px;
   }
 
-  .color-button-wrapper {
+  button {
     width: 35px;
     height: 35px;
     display: flex;
@@ -19,13 +19,16 @@
     transition: all .1s ease;
     border: 2px solid transparent;
     border-radius: 50%;
+    padding: 2px;
+    box-sizing: content-box;
+    background: transparent;
 
     &:hover,
     &:focus {
       border-color: #777;
     }
 
-    button {
+    .button-inner {
       width: 28px;
       height: 28px;
       border: 1px solid rgba(0, 0, 0, .2);
@@ -38,21 +41,6 @@
       transition: all .1s ease;
       cursor: pointer;
 
-      svg {
-        position: absolute;
-        top: 5px;
-        left: 5px;
-        opacity: 0;
-      }
-
-      &:hover,
-      &:active,
-      &:focus {
-        width: 32px;
-        height: 32px;
-        box-shadow: inset 0 0 0 16px;
-      }
-
       &:after {
         content: "";
         position: absolute;
@@ -63,15 +51,34 @@
         border-radius: 50%;
         box-shadow: inset 0 0 0 1px rgba(0, 0, 0, .2);
       }
+    }
 
-      &[aria-pressed=true] {
+    svg {
+      position: absolute;
+      top: 6px;
+      left: 6px;
+      opacity: 0;
+    }
+
+    &:hover,
+    &:active,
+    &:focus {
+      .button-inner {
+        width: 32px;
+        height: 32px;
+        box-shadow: inset 0 0 0 16px;
+      }
+    }
+
+    &[aria-pressed=true] {
+      .button-inner {
         box-shadow: inset 0 0 0 5px;
         width: 32px;
         height: 32px;
+      }
 
-        svg {
-          opacity: 1;
-        }
+      svg {
+        opacity: 1;
       }
     }
   }
@@ -87,10 +94,11 @@
       text-align: left;
       padding: 10px;
       cursor: pointer;
+      text-decoration: underline;
     }
 
     input.kirki-color-control {
-      width: 100px;
+      width: auto;
       font-family: monospace;
       font-size: 12px;
       background: none;
