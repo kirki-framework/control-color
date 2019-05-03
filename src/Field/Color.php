@@ -55,7 +55,7 @@ class Color extends Field {
 
 		// Set the sanitize-callback if none is defined.
 		if ( ! isset( $args['sanitize_callback'] ) || ! $args['sanitize_callback'] ) {
-			$args['sanitize_callback'] = [ '\kirki\Field\Color', 'sanitize' ];
+			$args['sanitize_callback'] = [ __CLASS__, 'sanitize' ];
 
 			// If this is a hue control then its value should be an integer.
 			if ( isset( $args['mode'] ) && 'hue' === $args['mode'] ) {
