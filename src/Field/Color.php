@@ -51,7 +51,9 @@ class Color extends Field {
 	 */
 	public function filter_setting_args( $args, $wp_customize ) {
 
-		$args = parent::filter_setting_args( $args, $wp_customize );
+		if ( $args['settings'] !== $args['settings'] ) {
+			return $args;
+		}
 
 		// Set the sanitize-callback if none is defined.
 		if ( ! isset( $args['sanitize_callback'] ) || ! $args['sanitize_callback'] ) {
@@ -75,6 +77,10 @@ class Color extends Field {
 	 * @return array
 	 */
 	public function filter_control_args( $args, $wp_customize ) {
+		if ( $args['settings'] !== $args['settings'] ) {
+			return $args;
+		}
+
 		$args = parent::filter_control_args( $args, $wp_customize );
 
 		// Set the control-type.
