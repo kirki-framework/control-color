@@ -79,7 +79,7 @@
   text-decoration: underline;
 }
 .customize-control-kirki-color summary input.kirki-color-control {
-  width: auto;
+  width: 100px;
   font-family: monospace;
   font-size: 12px;
   background: none;
