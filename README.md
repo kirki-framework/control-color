@@ -72,6 +72,7 @@ Things to note regarding this abstraction:
 
 * The `Kirki\Field\Color` object will register the control-class, add the setting and the control, all in one step.
 * While the default WordPress Customizer API requires hooking in `customize_register`, using the `Kirki\Field\Color` class should not be done inside that hook. There is no need for that, all actions are added automatically by the object itself.
+* The sanitization callback is automatically added if left undefined.
 
 ## Updating the node modules
 
