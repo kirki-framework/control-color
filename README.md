@@ -1,4 +1,4 @@
-# control-color
+# kirki-framework/control-color
 
 ## Installation
 
@@ -8,7 +8,7 @@ First, install the package using composer:
 composer require kirki-framework/control-color
 ```
 
-Make sure you include the autoloader:
+Make sure you include the autoloader in your `functions.php` file if using the control in a WordPress theme:
 ```php
 require_once get_parent_theme_file_path( 'vendor/autoload.php' );
 ```
