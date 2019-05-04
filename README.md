@@ -13,6 +13,8 @@ Make sure you include the autoloader:
 require_once get_parent_theme_file_path( 'vendor/autoload.php' );
 ```
 
+## Use with the WordPress Customizer API:
+
 To add a control using the customizer API:
 
 ```php
@@ -57,7 +59,30 @@ add_action( 'customize_register', function( $wp_customize ) {
 } );
 ```
 
-To update the node modules:
+## Simplified/Abstracted API
+
+The above control can also be added using a slightly simplified syntax like this:
+
+```php
+new \Kirki\Field\Color( [
+	'option_type' => 'theme_mod',
+	'capability'  => 'edit_theme_options',
+	'default'     => '#fff',
+	'transport'   => 'refresh', // Or postMessage.
+	'label'       => esc_html__( 'My Color Control', 'theme_textdomain' ),
+	'section'     => 'colors',
+	'choices'     => [
+		'alpha' => true,
+	]
+] );
+```
+
+Things to note regarding this abstraction:
+
+* The `Kirki\Field\Color` object will register the control-class, add the setting and the control, all in one step.
+* While the default WordPress Customizer API requires hooking in `customize_register`, using the `Kirki\Field\Color` class should not be done inside that hook. There is no need for that, all actions are added automatically by the object itself.
+
+## Updating the node modules
 
 ```
 rm -rf node_modules && npm install --only=production
