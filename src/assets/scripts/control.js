@@ -67,7 +67,6 @@ wp.customize.controlConstructor['kirki-color'] = wp.customize.kirkiDynamicContro
 
 		_.each( items, function( item ) {
 			var color = '';
-			console.log( value );
 			if ( jQuery( item ).attr( 'data-color' ) ) {
 				color = jQuery( item ).attr( 'data-color' );
 				if ( color === value ) {

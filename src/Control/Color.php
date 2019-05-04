@@ -117,7 +117,78 @@ class Color extends Base {
 		$this->json['palette']          = $this->palette;
 		$this->json['choices']['alpha'] = ( isset( $this->choices['alpha'] ) && $this->choices['alpha'] ) ? 'true' : 'false';
 		$this->json['mode']             = $this->mode;
-		$this->json['defaultPalette']   = [ '#f78da7', '#cf2e2e', '#ff6900', '#fcb900', '#7bdcb5', '#00d084', '#8ed1fc', '#0693e3', '#eee', '#abb8c3', '#313131' ];
+		$this->json['defaultPalette']   = 			[
+			[
+				'name'  => esc_attr__( 'Pale Pink', 'kirki' ),
+				'slug'  => 'pale-pink',
+				'color' => '#f78da7',
+			],
+			[
+				'name'  => esc_attr__( 'Vivid Red', 'kirki' ),
+				'slug'  => 'vivid-red',
+				'color' => '#cf2e2e',
+			],
+			[
+				'name'  => esc_attr__( 'Luminous Vivid Orange', 'kirki' ),
+				'slug'  => 'luminous-vivid-orange',
+				'color' => '#ff6900',
+			],
+			[
+				'name'  => esc_attr__( 'Luminous Vivid Amber', 'kirki' ),
+				'slug'  => 'luminous-vivid-amber',
+				'color' => '#fcb900',
+			],
+			[
+				'name'  => esc_attr__( 'Light Green Cyan', 'kirki' ),
+				'slug'  => 'light-green-cyan',
+				'color' => '#7bdcb5',
+			],
+			[
+				'name'  => esc_attr__( 'Vivid Green Cyan', 'kirki' ),
+				'slug'  => 'vivid-green-cyan',
+				'color' => '#00d084',
+			],
+			[
+				'name'  => esc_attr__( 'Pale Cyan Blue', 'kirki' ),
+				'slug'  => 'pale-cyan-blue',
+				'color' => '#8ed1fc',
+			],
+			[
+				'name'  => esc_html__( 'Vivid Cyan Blue', 'kirki' ),
+				'slug'  => 'vivid-cyan-blue',
+				'color' => '#0693e3',
+			],
+			[
+				'name'  => esc_attr__( 'White', 'kirki' ),
+				'slug'  => 'theme-white',
+				'color' => '#fff',
+			],
+			[
+				'name'  => esc_attr__( 'Very Light Gray', 'kirki' ),
+				'slug'  => 'very-light-gray',
+				'color' => '#eee',
+			],
+			[
+				'name'  => esc_html__( 'Cyan Bluish Gray', 'kirki' ),
+				'slug'  => 'cyan-bluish-gray',
+				'color' => '#abb8c3',
+			],
+			[
+				'name'  => esc_attr__( 'Blue Gray', 'kirki' ),
+				'slug'  => 'blue-gray',
+				'color' => '#546E7A',
+			],
+			[
+				'name'  => esc_attr__( 'Very Dark Gray', 'kirki' ),
+				'slug'  => 'very-dark-gray',
+				'color' => '#313131',
+			],
+			[
+				'name'  => esc_attr__( 'Black', 'kirki' ),
+				'slug'  => 'theme-black',
+				'color' => '#000',
+			],
+		];
 	}
 
 	/**
@@ -157,46 +228,65 @@ class Color extends Base {
 			<# if ( 'hue' !== data.mode && true === data.palette ) { #>
 				<?php $editor_palette = current( (array) get_theme_support( 'editor-color-palette' ) ); ?>
 				<?php if ( ! empty( $editor_palette ) ) : ?>
-					<#	var kirkiColorEditorPalette = <?php echo wp_strip_all_tags( wp_json_encode( $editor_palette ) ) // phpcs:ignore WordPress.Security.EscapeOutput ?>; #>
-
-					<# _.each( kirkiColorEditorPalette, function( paletteColor ) { #>
-						<#
-						paletteColor.color = paletteColor.color.toLowerCase();
-						if ( 0 === paletteColor.color.indexOf( '#' ) && 4 === paletteColor.color.split( '' ).length ) {
-							paletteColor.color = '#' + paletteColor.color.split( '' )[1] + paletteColor.color.split( '' )[1] + paletteColor.color.split( '' )[2] + paletteColor.color.split( '' )[2] + paletteColor.color.split( '' )[3] + paletteColor.color.split( '' )[3]
-						}
-
-						var selected = ( data.value === paletteColor.color );
-						if ( selected ) {
-							hasPaletteColorSelected = true;
-						}
-						#>
-						<button
-							class="palette-color palette-color-{{ paletteColor.slug }}"
-							data-color="{{ paletteColor.color }}"
-							aria-label="<?php printf(
-								/* translators: the color name. */
-								esc_attr_e( 'Color: %s', 'kirki' ),
-								'{{ paletteColor.name }}'
-							); ?>"
-							aria-pressed="{{ selected }}"
-							>
-							<span class="button-inner" style="color:{{ paletteColor.color }};">
-								<svg aria-hidden="true" role="img" focusable="false" class="dashicon dashicons-saved" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20"><path d="M15.3 5.3l-6.8 6.8-2.8-2.8-1.4 1.4 4.2 4.2 8.2-8.2"></path></svg>
-							</span>
-						</button>
-					<# }); #>
+					<# var kirkiColorEditorPalette = <?php echo wp_strip_all_tags( wp_json_encode( $editor_palette ) ) // phpcs:ignore WordPress.Security.EscapeOutput ?>; #>
 				<?php else : ?>
-					<# _.each( data.defaultPalette, function( paletteColor ) { #>
-						<button class="palette-color palette-color-{{ paletteColor }}" style="color:{{ paletteColor }};" title="{{ paletteColor }}" data-color="{{ paletteColor }}">
-							<span class="screen-reader-text">{{ paletteColor }}</span>
-						</button>
-					<# }); #>
+					<# var kirkiColorEditorPalette = data.defaultPalette; #>
 				<?php endif; ?>
+
+				<# _.each( kirkiColorEditorPalette, function( paletteColor ) { #>
+					<#
+					paletteColor.color = paletteColor.color.toLowerCase();
+					if ( 0 === paletteColor.color.indexOf( '#' ) && 4 === paletteColor.color.split( '' ).length ) {
+						paletteColor.color = '#' + paletteColor.color.split( '' )[1] + paletteColor.color.split( '' )[1] + paletteColor.color.split( '' )[2] + paletteColor.color.split( '' )[2] + paletteColor.color.split( '' )[3] + paletteColor.color.split( '' )[3]
+					}
+
+					var selected = ( data.value === paletteColor.color );
+					if ( selected ) {
+						hasPaletteColorSelected = true;
+					}
+					#>
+					<button
+						class="palette-color palette-color-{{ paletteColor.slug }}"
+						data-color="{{ paletteColor.color }}"
+						title="{{ paletteColor.name }}"
+						aria-label="<?php printf(
+							/* translators: the color name. */
+							esc_attr_e( 'Color: %s', 'kirki' ),
+							'{{ paletteColor.name }}'
+						); ?>"
+						aria-pressed="{{ selected }}"
+						>
+						<span class="button-inner" style="color:{{ paletteColor.color }};">
+							<svg aria-hidden="true" role="img" focusable="false" class="dashicon dashicons-saved" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20"><path d="M15.3 5.3l-6.8 6.8-2.8-2.8-1.4 1.4 4.2 4.2 8.2-8.2"></path></svg>
+						</span>
+					</button>
+				<# }); #>
 			<# } else if ( 'object' === typeof data.palette ) { #>
 				<# _.each( data.palette, function( paletteColor ) { #>
-					<button class="palette-color palette-color-{{ paletteColor }}" style="color:{{ paletteColor }};" title="{{ paletteColor }}" data-color="{{ paletteColor }}">
-						<span class="screen-reader-text">{{ paletteColor }}</span>
+					<#
+					paletteColor = paletteColor.toLowerCase();
+					if ( 0 === paletteColor.indexOf( '#' ) && 4 === paletteColor.split( '' ).length ) {
+						paletteColor = '#' + paletteColor.split( '' )[1] + paletteColor.split( '' )[1] + paletteColor.split( '' )[2] + paletteColor.split( '' )[2] + paletteColor.split( '' )[3] + paletteColor.split( '' )[3]
+					}
+					var selected = ( data.value === paletteColor );
+					if ( selected ) {
+						hasPaletteColorSelected = true;
+					}
+					#>
+					<button
+						class="palette-color palette-color-{{ paletteColor }}"
+						data-color="{{ paletteColor }}"
+						title="{{ paletteColor }}"
+						aria-label="<?php printf(
+							/* translators: the color name. */
+							esc_attr_e( 'Color: %s', 'kirki' ),
+							'{{ paletteColor }}'
+						); ?>"
+						aria-pressed="{{ selected }}"
+						>
+						<span class="button-inner" style="color:{{ paletteColor }};">
+							<svg aria-hidden="true" role="img" focusable="false" class="dashicon dashicons-saved" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20"><path d="M15.3 5.3l-6.8 6.8-2.8-2.8-1.4 1.4 4.2 4.2 8.2-8.2"></path></svg>
+						</span>
 					</button>
 				<# }); #>
 			<# } #>
