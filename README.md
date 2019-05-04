@@ -18,18 +18,6 @@ require_once get_parent_theme_file_path( 'vendor/autoload.php' );
 To add a control using the customizer API:
 
 ```php
-
-/**
- * Registers the control and whitelists it for JS templating.
- *
- * @since 1.0
- * @param WP_Customize_Manager $wp_customize The WP_Customize_Manager object.
- * @return void
- */
-add_action( 'customize_register', function( $wp_customize ) {
-	$wp_customize->register_control_type( '\Kirki\Control\Color' );
-} );
-
 /**
  * Add Customizer settings & controls.
  * 
@@ -38,6 +26,9 @@ add_action( 'customize_register', function( $wp_customize ) {
  * @return void
  */
 add_action( 'customize_register', function( $wp_customize ) {
+
+	// Registers the control and whitelists it for JS templating.
+	$wp_customize->register_control_type( '\Kirki\Control\Color' );
 
 	// Add setting.
 	$wp_customize->add_setting( 'my_control', [
