@@ -1,3 +1,4 @@
+/* global Color, wpColorPickerL10n */
 /**!
  * wp-color-picker-alpha
  *
@@ -24,16 +25,19 @@
 	 * for enable support rbga
 	 */
 	Color.fn.toString = function() {
-		if ( this._alpha < 1 )
+		if ( this._alpha < 1 ) {
 			return this.toCSS( 'rgba', this._alpha ).replace( /\s+/g, '' );
+		}
 
 		var hex = parseInt( this._color, 10 ).toString( 16 );
 
-		if ( this.error )
+		if ( this.error ) {
 			return '';
+		}
 
-		if ( hex.length < 6 )
+		if ( hex.length < 6 ) {
 			hex = ( '00000' + hex ).substr( -6 );
+		}
 
 		return '#' + hex;
 	};
@@ -187,7 +191,7 @@
 							'background-image': 'url(' + image + ')',
 							'position': 'relative'
 						} );
-						if ( self.toggler.find( 'span.color-alpha' ).length == 0 ) {
+						if ( self.toggler.find( 'span.color-alpha' ).length === 0 ) {
 							self.toggler.append( '<span class="color-alpha" />' );
 						}
 						self.toggler.find( 'span.color-alpha' ).css( {
@@ -278,8 +282,9 @@
 					}
 
 					// Fire clear callback if we have one
-					if ( $.isFunction( self.options.clear ) )
+					if ( $.isFunction( self.options.clear ) ) {
 						self.options.clear.call( this, event );
+					}
 				}
 			} );
 
@@ -303,8 +308,9 @@
 						self.toggler.css( 'backgroundColor', '' );
 					}
 
-					if ( $.isFunction( self.options.clear ) )
+					if ( $.isFunction( self.options.clear ) ) {
 						self.options.clear.call( this, event );
+					}
 
 				} else if ( $( this ).hasClass( 'wp-picker-default' ) ) {
 					self.element.val( self.options.defaultColor ).change();
@@ -324,8 +330,9 @@
 			this.options.alpha = this.element.data( 'alpha' ) || false;
 
 			// Is not input disabled
-			if ( ! this.element.is( ':input' ) )
+			if ( ! this.element.is( ':input' ) ) {
 				this.options.alpha = false;
+			}
 
 			if ( typeof this.options.alpha !== 'undefined' && this.options.alpha ) {
 				var self       = this,
@@ -348,8 +355,9 @@
 				self.options.defaultWidth = el.width();
 
 				// Update width for input
-				if ( self._color._alpha < 1 || self._color.toString().indexOf( 'rgb' ) != -1 )
+				if ( self._color._alpha < 1 || self._color.toString().indexOf( 'rgb' ) !== -1 ) {
 					el.width( parseInt( self.options.defaultWidth + self.options.customWidth ) );
+				}
 
 				// Push new controls
 				$.each( controls, function( k, v ) {
@@ -453,13 +461,15 @@
 					// We gave a bad color
 					if ( color.error ) {
 						// Don't error on an empty input
-						if ( val !== '' )
+						if ( val !== '' ) {
 							input.addClass( 'iris-error' );
+						}
 					} else {
 						if ( color.toString() !== self._color.toString() ) {
 							// Let's not do this on keyup for hex shortcodes
-							if ( ! ( event.type === 'keyup' && val.match( /^[0-9a-fA-F]{3}$/ ) ) )
+							if ( ! ( event.type === 'keyup' && val.match( /^[0-9a-fA-F]{3}$/ ) ) ) {
 								self._setOption( 'color', color.toString() );
+							}
 						}
 					}
 				};
