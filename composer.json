@@ -15,8 +15,7 @@
     ],
     "require": {
         "php": ">=5.6",
-        "wptrt/control-color-alpha": "*",
-        "kirki-framework/field": "dev-master"
+        "kirki-framework/control-react-color": "*"
     },
     "autoload": {
 		"psr-4": {
